@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  orders    Order[]
+  address   Address?
+  isAdmin   Boolean  @default(false)
+
+  cartItems CartItem[]
+}
+
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  image       String?
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  userId    Int
+  productId Int
+  user      User    @relation(fields: [userId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id         Int           @id @default(autoincrement())
+  userId     Int
+  user       User          @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+  shipping   ShippingInfo?
+  orderDate  DateTime
+  totalPrice Decimal
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  productId Int
+  orderId   Int
+  product   Product @relation(fields: [productId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id])
+  price     Decimal
+}
+
+model ShippingInfo {
+  id      Int    @id @default(autoincrement())
+  method  String
+  orderId Int    @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+}
+
+model Address {
+  id          Int    @id @default(autoincrement())
+  addressInfo String
+  userId      Int    @unique
+  user        User   @relation(fields: [userId], references: [id])
+}
