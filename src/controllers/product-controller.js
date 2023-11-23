@@ -17,7 +17,7 @@ exports.createProduct = async (req, res, next) => {
 
     const { value, error } = createProductSchema.validate(req.body);
     console.log(value);
-    console.log(error)
+    console.log(error);
     data.name = value.name;
     data.description = value.description;
     data.price = value.price;
@@ -66,8 +66,28 @@ exports.getAllProduct = async (req, res, next) => {
   try {
     const products = await prisma.product.findMany({});
 
-    res.json({ products });
+    res.status(200).json({ message: "ok", products });
   } catch (err) {
+    next(err);
+  }
+};
+
+exports.editProduct = async (req, res, next) => {
+  try {
+    const { name, description, price } = req.body;
+    const id = +req.params.id;
+    const editProduct = await prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        description,
+        price,
+      },
+    });
+    res.status(200).json({ message: "ok", editProduct });
+  } catch (error) {
     next(err);
   }
 };
