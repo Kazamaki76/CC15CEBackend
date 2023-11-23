@@ -8,6 +8,7 @@ const errorMiddleware = require("./middleware/error");
 const rateLimitMiddleware = require("./middleware/rate-limit-middleware");
 const authRoute = require("./routes/auth-routes");
 const productRoute = require('./routes/product-route')
+const cartRoute = require("./routes/cart-routes")
 
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.static('public'));
 
 app.use("/auth", authRoute);
 app.use('/product' ,productRoute);
+app.use("/cart", cartRoute)
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

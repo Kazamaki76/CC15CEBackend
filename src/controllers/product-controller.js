@@ -8,20 +8,19 @@ const { image } = require("../config/cloudinary");
 
 exports.createProduct = async (req, res, next) => {
   const { name, description, price, image } = req.body;
-  console.log(req.body);
+
   try {
     const data = {};
     if (req.file) {
       data.image = await upload(req.file.path);
     }
-    console.log(req.file);
 
     const { value, error } = createProductSchema.validate(req.body);
-
+    console.log(value);
+    console.log(error)
     data.name = value.name;
     data.description = value.description;
     data.price = value.price;
-    console.log(value);
 
     const creatProduct = await prisma.product.create({
       data: data,
@@ -66,7 +65,7 @@ exports.deleteProduct = async (req, res, next) => {
 exports.getAllProduct = async (req, res, next) => {
   try {
     const products = await prisma.product.findMany({});
-    console.log(products);
+
     res.json({ products });
   } catch (err) {
     next(err);
