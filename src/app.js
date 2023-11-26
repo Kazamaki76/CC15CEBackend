@@ -9,7 +9,8 @@ const rateLimitMiddleware = require("./middleware/rate-limit-middleware");
 const authRoute = require("./routes/auth-routes");
 const productRoute = require('./routes/product-route')
 const cartRoute = require("./routes/cart-routes")
-const paymentRoute = require("./routes/order-routes")
+const orderRoute = require("./routes/order-routes");
+const paymentRoute = require("./routes/paymen-route");
 
 
 const app = express();
@@ -23,7 +24,8 @@ app.use(express.static('public'));
 app.use("/auth", authRoute);
 app.use('/product' ,productRoute);
 app.use("/cart", cartRoute)
-app.use("/order",paymentRoute )
+app.use("/order",orderRoute );
+app.use("/payment",paymentRoute);
 
 
 app.use(notFoundMiddleware);

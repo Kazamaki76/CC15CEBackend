@@ -16,7 +16,7 @@ model User {
   lastName  String
   email     String   @unique
   password  String
-  // orders    Order[]
+  orders    Order[]
   address   Address?
   isAdmin   Boolean  @default(false)
 
@@ -24,7 +24,7 @@ model User {
 }
 
 model Product {
-  id          Int         @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
   description String?
   price       Decimal
@@ -43,30 +43,30 @@ model CartItem {
 }
 
 model Order {
-  id         Int        @id @default(autoincrement())
-  // userId     Int
-  // user       User          @relation(fields: [userId], references: [id])
+  id           Int       @id @default(autoincrement())
+  paymentImage String?
+  userId       Int
+  user         User      @relation(fields: [userId], references: [id])
   // orderItems OrderItem[]
   // shipping   ShippingInfo?
   // orderDate  DateTime
   // totalPrice Decimal
-  paymentImage String? 
-
+  payment      Payment[]
 }
 
 model OrderItem {
-  id        Int     @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   // quantity  Int
   // productId Int
   // orderId   Int
   // product   Product @relation(fields: [productId], references: [id])
   // order     Order   @relation(fields: [orderId], references: [id])
   // price     Decimal
-  paymentImage String? 
+  paymentImage String?
 }
 
 model ShippingInfo {
-  id      Int    @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   // method  String
   // orderId Int    @unique
   // order   Order  @relation(fields: [orderId], references: [id])
@@ -77,4 +77,11 @@ model Address {
   addressInfo String
   userId      Int    @unique
   user        User   @relation(fields: [userId], references: [id])
+}
+
+model Payment {
+  id         Int   @id @default(autoincrement())
+  totalPrice Int   @default(0)
+  orderId    Int
+  order      Order @relation(fields: [orderId], references: [id])
 }
