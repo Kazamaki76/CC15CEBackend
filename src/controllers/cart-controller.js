@@ -3,8 +3,8 @@ const prisma = require("../model/prisma");
 exports.addCart = async (req, res, next) => {
   try {
     const { id, quantity, authUser } = req.body;
-
-    console.log(req.body);
+    
+    
     await prisma.cartItem.create({
       data: {
         productId: +id,
@@ -29,7 +29,7 @@ exports.getCart = async (req, res, next) => {
         product: true,
       },
     });
-    console.log(cart);
+   
     res.status(200).json({ cart });
   } catch (error) {
     next(error);
@@ -39,7 +39,7 @@ exports.getCart = async (req, res, next) => {
 exports.deleteCart = async (req, res, next) => {
   try {
     const { cartid } = req.params;
-    console.log(cartid);
+    
     await prisma.cartItem.delete({
       where: {
         id: +cartid,
@@ -47,6 +47,21 @@ exports.deleteCart = async (req, res, next) => {
     });
 
     res.status(200).json({ message: "Cart item deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteAllCart = async (req, res, next) => {
+  try {
+    const userId = +req.user.id 
+    await prisma.cartItem.deleteMany({
+      where: {
+        userId
+      },
+    });
+
+    res.status(200).json({ message: "all Cart item deleted" });
   } catch (error) {
     next(error);
   }

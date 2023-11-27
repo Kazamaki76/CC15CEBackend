@@ -17,8 +17,7 @@ exports.createProduct = async (req, res, next) => {
     }
 
     const { value, error } = createProductSchema.validate(req.body);
-    console.log(value);
-    console.log(error);
+ 
     data.name = value.name;
     data.description = value.description;
     data.price = value.price;
@@ -96,13 +95,7 @@ exports.editProduct = async (req, res, next) => {
 exports.deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
-
-    await prisma.orderItem.deleteMany({
-      where: {
-        productId: +id,
-      },
-    });
+    
 
     await prisma.cartItem.deleteMany({
       where: {

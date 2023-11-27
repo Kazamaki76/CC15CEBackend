@@ -80,8 +80,15 @@ model Address {
 }
 
 model Payment {
-  id         Int   @id @default(autoincrement())
-  totalPrice Int   @default(0)
+  id         Int    @id @default(autoincrement())
+  totalPrice Int    @default(0)
   orderId    Int
-  order      Order @relation(fields: [orderId], references: [id])
+  order      Order  @relation(fields: [orderId], references: [id])
+  status     status @default(PENDING)
+}
+
+enum status {
+  PENDING
+  CONFIRM
+  REJECT
 }

@@ -11,7 +11,7 @@ const postPayment = async (req, res, next) => {
     const totalPrice = req.body.totalPrice;
     const orderId = req.body.orderId;
 
-    // console.log(body);
+  
 
     // await prism
     const newPayment = await prisma.payment.create({
@@ -28,3 +28,23 @@ const postPayment = async (req, res, next) => {
 };
 
 exports.postPayment = postPayment;
+
+exports.updateStatus = async (req, res, next) => {
+  try {
+    const paymentId  = req.params.paymentId;
+    const {status} = req.body;
+    
+    await prisma.payment.update({
+      data: {
+        status,
+      },
+      where: {
+        id: +paymentId
+      }
+    });
+
+    res.status(200).json({ message: "status change" });
+  } catch (error) {
+    next(error);
+  }
+};
